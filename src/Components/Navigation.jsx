@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,6 +11,11 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { Link, useNavigate } from 'react-router-dom';
 
+import { HiMenuAlt2 } from 'react-icons/hi';
+import { HiMenu } from 'react-icons/hi';
+
+import { MainContext } from '../Hooks/Context/MainContext';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -19,10 +24,11 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   title: {
+    marginLeft: '10px',
     width: '20vw',
     [theme.breakpoints.down('xs')]: {
 
-        flexGrow: 1,
+      flexGrow: 1,
     }
   },
 
@@ -31,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: "space-between",
     paddingRight: "10vw",
+  },
+  Link: {
+    textDecoration: 'none'
+
   },
 
 }));
@@ -43,10 +53,13 @@ const Navigation = () => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [state, setState] = useState(null)
-    
+    //sidebar:
+    const { sideBarShown, setSideBarShown } = useContext(MainContext);
+
     const open = Boolean(anchorEl);
     // console.log(open);
 
+    const Link_Styles= {textDecoration: 'none', color: 'white'};
     const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   
     const handleMenu = (event) => {
@@ -66,7 +79,11 @@ const Navigation = () => {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-
+            {sideBarShown ?
+              <HiMenu style={{ fontSize: 30}} onClick={() => setSideBarShown(!sideBarShown)}/>
+            :
+              <HiMenuAlt2 style={{ fontSize: 30}} onClick={() => setSideBarShown(!sideBarShown)} />
+            }
             <Typography variant="h6" className={classes.title}>
               Photos
             </Typography>
@@ -107,12 +124,12 @@ const Navigation = () => {
                 </div>
             :
                 <div className={classes.links}>
-                    <Link to='/'>Home</Link>
-                    <Link to='/about'>About</Link>
-                    <Link to='/contact'>Contact</Link>
-                    <Link to='/'>Home</Link>
-                    <Link to='/about'>About</Link>
-                    <Link to='/contact'>Contact</Link>
+                    <Link to='/' className={classes.link} style={Link_Styles} >Home</Link>
+                    <Link to='/about' className={classes.link} style={Link_Styles} >About</Link>
+                    <Link to='/contact' className={classes.link} style={Link_Styles} >Contact</Link>
+                    <Link to='/' className={classes.link} style={Link_Styles} >Home</Link>
+                    <Link to='/about' className={classes.link} style={Link_Styles} >About</Link>
+                    <Link to='/contact' className={classes.link} style={Link_Styles} >Contact</Link>
                 </div>
             }
 
